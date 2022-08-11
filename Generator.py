@@ -1,6 +1,6 @@
 # Generator
-# Original by The.Ertor [https://github.com/MrErtor]
-# Fixed by NobootRecord [https://github.com/NobootRecord]
+# Tiny and user-friendly random number generator written in Python3 using Tkinter GUI framework
+# by Egor Komarov [https://github.com/MrErtor] and Ivan Movchan [https://github.com/NobootRecord]
 
 # Import everything we need
 from tkinter import * 
@@ -8,37 +8,71 @@ from tkinter import messagebox
 import random
 import webbrowser
 import pyperclip
+from datetime import datetime
 
 # Some variables
 root = Tk()
 inputFieldOne = None
 inputFieldTwo = None
 errorTitle = None
-progver = "3.2"
+progver = "3.3"
 light = 1
 dark = 0
 prog_theme = light
 
 # Localization
-eng = {"loc": "Generate number", "loc1": "Generator",  "loc2": "Enter the first number", "loc3": "Enter the second number", "loc4": "The entered value is not correct", "loc5": "Input Error", "loc6": "Help", "loc7": "About", "loc8": "Settings", "loc9": "Switch to Russian", "loc10": "Generator "+progver+"\nWritten in Python3 using Tkinter framework\n\nOriginal by The.Ertor\nFixed by NobootRecord\n\nCopyright (c) 2022", "loc11": "Dark/Light theme", "loc12": "Project on GitHub"}
-rus = {"loc": "Сгенерировать число", "loc1": "Генератор", "loc2": "Введите первое число", "loc3": "Введите второе число", "loc4": "Введенное значение неверно", "loc5": "Ошибка ввода", "loc6": "Справка", "loc7": "О программе", "loc8": "Настройки", "loc9": "Сменить на Английский", "loc10": "Генератор, версия "+progver+"\nПрограмма написана на Python3 с использованием фреймворка Tkinter\n\nАвтор оригинала: The.Ertor\nДопилил и отполировал: NobootRecord\n\nCopyright (c) 2022", "loc11": "Тёмная/светлая тема", "loc12": "Проект на GitHub"}
+eng = {"loc": "Generate number", "loc1": "Generator", 
+"loc2": "Min value:", "loc3": "Max value",
+"loc4": "The entered data is not correct", "loc5": "Input Error",
+"loc6": "Help", "loc7": "About", "loc8": "Settings", "loc9": "Switch to Russian",
+"loc10": "Generator "+progver+"\nWritten in Python3 using Tkinter framework\nAuthors: Egor Komarov, Ivan Movchan\n\nCopyright (c) 2022",
+"loc11": "Dark/Light theme", "loc12": "Project on GitHub", "loc13": "Clear"}
+rus = {"loc": "Сгенерировать число", "loc1": "Генератор",
+"loc2": "Минимальное значение", "loc3": "Максимальное значение",
+"loc4": "Введенные данные некорректны", "loc5": "Ошибка ввода",
+"loc6": "Справка", "loc7": "О программе", "loc8": "Настройки", "loc9": "Сменить на Английский",
+"loc10": "Генератор, версия "+progver+"\nПрограмма написана на Python3 с использованием фреймворка Tkinter\nАвторы: Егор Комаров, Иван Мовчан\n\nПрава сохранены (c) 2022",
+"loc11": "Тёмная/светлая тема", "loc12": "Проект на GitHub", "loc13": "Очистить"}
 lang_dict = eng
 lang_dict["loc"]
 is_eng = True
 
+# Print current time
+def print_time():
+    now = datetime.now()
+    asdasdf = now.strftime("[%D %H:%M:%S]")
+    print(asdasdf, end=' ')
 
-# Commands
+# On program close
+def close_prog():
+    print_time()
+    print('The system is halted. Have a nice day!')
+    exit()
+
+# Generate random number
 def btn_click():
+    print_time()
+    print('Generating random number')
     inputFieldOneValue = inputFieldOne.get()
     inputFieldTwoValue = inputFieldTwo.get()
     try:
         randomNum = random.randint(int(inputFieldOneValue), int(inputFieldTwoValue))
-        info["text"] = randomNum
+        info["text"] = info["text"] + str(randomNum) + ", "
     except ValueError:
+        print_time()
+        print('ValueError exception!!!')
         url = messagebox.showerror(title=lang_dict["loc5"], message=lang_dict["loc4"])
+
+# Clear
+def btn2_click():
+    print_time()
+    print('Clearing number label')
+    info["text"] = ""
 
 # Language change function
 def change_lang():
+    print_time()
+    print('Switching program language')
     global is_eng
     global lang_dict
     is_eng = not is_eng
@@ -50,6 +84,8 @@ def change_lang():
     
 # Theme change function
 def change_theme():
+    print_time()
+    print('Changing program theme')
     global prog_theme
     if prog_theme == light:
         prog_theme = dark
@@ -59,6 +95,8 @@ def change_theme():
         
 # Initialize GUI
 def init_gui():
+    print_time()
+    print('Initializing GUI')
     if prog_theme == light:
         formbg = "white"
         formfg = "black"
@@ -83,61 +121,55 @@ def init_gui():
     fm1.add_command(label = lang_dict["loc9"], command = change_lang) # Language
     fm1.add_command(label = lang_dict["loc11"], command = change_theme) # Theme
     frame = Frame(root, bg=formbg)
-    frame.place(relx=0.15, rely=0.15, relwidth=0.7, relheight=0.7)
-    global title1
-    title1 = Label(frame, text=lang_dict["loc1"], bg=formbg, fg=formfg, font=400) # Number Generator Text
-    title1.pack()
-    title2 = Label(frame, text="", bg=formbg, font=40)
-    title2.pack()
-    global title3
-    title3 = Label(frame, text=lang_dict["loc2"], bg=formbg, fg=formfg, font=400) # Entering the first number
-    title3.pack()
+    frame.place(relx=0.15, rely=0.05, relwidth=0.7, relheight=0.7)
+    Label(frame, text=lang_dict["loc1"], bg=formbg, fg=formfg, font=("Comic Sans MS", 32)).pack()
+    Label(frame, text="", bg=formbg, font=40).pack()
+    Label(frame, text=lang_dict["loc2"], bg=formbg, fg=formfg, font=400).pack()
     global inputFieldOne
     inputFieldOne = Entry(frame, bg=color, fg=formfg)
     inputFieldOne.pack()
-    global title4
-    title4 = Label(frame, text=lang_dict["loc3"], bg=formbg, fg=formfg, font=400) # Entering the second number
-    title4.pack()
+    Label(frame, text=lang_dict["loc3"], bg=formbg, fg=formfg, font=400).pack()
     global inputFieldTwo
     inputFieldTwo = Entry(frame, bg=color, fg=formfg)
     inputFieldTwo.pack()
-    title5 = Label(frame, text="", bg=formbg, font=40)
-    title5.pack()
+    Label(frame, text="", bg=formbg, font=40).pack()
     frame_bottom = Frame(root, bg=color, bd=5)
-    frame_bottom.place(relx=0.15, rely=0.70, relwidth=0.7, relheight=0.1)
+    frame_bottom.place(relx=0.15, rely=0.70, relwidth=0.7, relheight=0.2)
     global info
-    info = Label(frame_bottom, text=" ", bg=color, fg=formfg, font=40) # Number output
+    info = Label(frame_bottom, text=" ", bg=color, fg=formfg, font=40, wraplength=250, justify="center")
     info.bind("<Double-Button-1>", copy_to_clip)
     info.pack()
-    global btn
-    btn = Button(frame, text=lang_dict["loc"], bg=color, fg=formfg, command=btn_click) # Generate button Text
-    btn.pack()
+    Button(frame, text=lang_dict["loc"], bg=color, fg=formfg, command=btn_click).pack()
+    Button(frame, text=lang_dict["loc13"], bg=color, fg=formfg, command=btn2_click).pack()
+    root.protocol("WM_DELETE_WINDOW", close_prog)
     root.mainloop()
 
 # GUI update function
 def update():
-        btn["text"] = lang_dict["loc"]
-        title1["text"] = lang_dict["loc1"]
-        root.title(lang_dict["loc1"])   
-        title3["text"] = lang_dict["loc2"]
-        title4["text"] = lang_dict["loc3"]
-        message = lang_dict["loc4"]
-        title = lang_dict["loc5"]
+        print_time()
+        print('Updating')
         init_gui()
         
-# Feature about user
-def about_click(): 
+# About program
+def about_click():
+    print_time()
+    print('Showing about messagebox')
     url = messagebox.showinfo(title=lang_dict["loc7"], message=lang_dict["loc10"])
     
 # Open project's GitHub repository
 def open_github():
+    print_time()
+    print('Opening project page on GitHub')
     webbrowser.open('https://github.com/MrErtor/generator')
     
 # Copy generated number into clipboard
 def copy_to_clip(event):
-    asdf = info.cget("text")
-    if asdf != "":
-        pyperclip.copy(asdf)
+    print_time()
+    print('Copying stuff into clipboard')
+    root.clipboard_clear()
+    root.clipboard_append(info["text"])
         
 # Let's go!
+print_time()
+print('Generator', progver, 'initialized :)')
 init_gui()
