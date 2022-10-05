@@ -7,7 +7,6 @@ from tkinter import *
 from tkinter import messagebox
 import random
 import webbrowser
-import pyperclip
 from datetime import datetime
 
 # Some variables
@@ -61,7 +60,7 @@ def btn_click():
     except ValueError:
         print_time()
         print('ValueError exception!!!')
-        url = messagebox.showerror(title=lang_dict["loc5"], message=lang_dict["loc4"])
+        messagebox.showerror(title=lang_dict["loc5"], message=lang_dict["loc4"])
 
 # Clear
 def btn2_click():
@@ -163,7 +162,7 @@ def open_github():
     webbrowser.open('https://github.com/MrErtor/generator')
     
 # Copy generated number into clipboard
-def copy_to_clip(event):
+def copy_to_clip():
     print_time()
     print('Copying stuff into clipboard')
     root.clipboard_clear()
